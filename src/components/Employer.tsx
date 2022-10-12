@@ -47,10 +47,12 @@ class EmployerComponent extends React.Component<EmployerComponentProps, Employer
         if(!rootTree) return null
         // this is the action that we just created
         // rootTree.employer.newEmployee
+        const num_employees = rootTree.employer.num_employees
         return (
             <div>
                 <h1>{rootTree.employer.name}</h1>
                 <h3>{rootTree.employer.location}</h3>
+                <p>{`Total number of employees ${num_employees}`}</p>
                 <hr/>
                 <p>New Employee</p>
                 <form onSubmit={this.onSubmit}>

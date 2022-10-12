@@ -24,6 +24,13 @@ const EmployerModel = types.model("Employer",{
     }
     return { newEmployee }
 })
+.views(self =>({
+    // explicit object return and specify each view in comment delimited list
+    get num_employees(){
+        return self.employees.length
+    }
+}))
+// 
 const RootModel = types.model("Root", {
     // childnode
     employer: EmployerModel
