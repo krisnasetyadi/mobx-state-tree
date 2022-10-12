@@ -28,6 +28,11 @@ const EmployerModel = types.model("Employer",{
     // explicit object return and specify each view in comment delimited list
     get num_employees(){
         return self.employees.length
+    },
+    // can't do "get" when use parameter
+    filtered_employees(searchString: string){
+        return self.employees.filter(employee => 
+            employee.name.includes(searchString))
     }
 }))
 // 
