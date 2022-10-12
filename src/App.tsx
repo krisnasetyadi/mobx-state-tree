@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import { setupRootStore } from './mst/setup';
 import { Provider } from 'mobx-react';
+import { EmployerComponent } from './components/Employer';
 
 interface Props {
 
@@ -26,9 +27,7 @@ class App extends React.Component<Props,State>{
     if(!rootTree) return null
     return (
       <Provider rootTree={rootTree}>
-        <div>
-          tes
-        </div>
+         <EmployerComponent/>
       </Provider>
     ); 
   }
