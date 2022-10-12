@@ -5,6 +5,16 @@ const EmployeeModel = types.model("Employee",{
     name: types.string,
     hours_worked: types.number,
 })
+.actions(self => {
+    // action for empployee node
+    function editEmployee(name: string, hours_worked: number) {
+        // aplly snapshot, first param is essiantially what youare updating
+        // and second is your new snapshot
+        // goo deeper from employee model
+        applySnapshot(self, {...self, name, hours_worked} )
+    }
+    return { editEmployee }
+})
 
 const EmployerModel = types.model("Employer",{
     // leafs nya
