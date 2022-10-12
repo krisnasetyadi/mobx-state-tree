@@ -1,5 +1,6 @@
-import {Instance, types, applySnapshot} from 'mobx-state-tree'
+import {Instance, types, applySnapshot, flow, onSnapshot} from 'mobx-state-tree'
 import { v4 as uuid} from 'uuid'
+import api from 'axios'
 const EmployeeModel = types.model("Employee",{
     id: types.identifier,
     name: types.string,
@@ -32,7 +33,21 @@ const EmployerModel = types.model("Employer",{
         // specified the new snapshot
         applySnapshot(self , {...self, employees: [{id,name,hours_worked}, ...self.employees] })
     }
-    return { newEmployee }
+
+    // this is a generated function , it's like async await
+    const save = flow(function* save(snapshot: any){
+        try {
+            const response = yield api.post('/employers', {snapshot})
+            console.log('response ', response)
+        } catch (error) {
+            console.log('error', error)
+        }
+ 
+    })
+    function afterCreate() {
+        onSnapshot(self,(snap: any)=> save(snap) )
+    }
+    return { newEmployee, afterCreate }
 })
 .views(self =>({
     // explicit object return and specify each view in comment delimited list
@@ -45,7 +60,13 @@ const EmployerModel = types.model("Employer",{
             employee.name.includes(searchString))
     }
 }))
-// 
+// .volatile(_ =>{
+//     // anytime apply new snapshot this wont be included
+//     // instead anytime you want update anything involve the state
+//     // you to do a manual mutation
+//     employee:[]
+// })
+
 const RootModel = types.model("Root", {
     // childnode
     employer: EmployerModel
