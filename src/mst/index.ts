@@ -1,5 +1,5 @@
-import {Instance, types} from 'mobx-state-tree'
-
+import {Instance, types, applySnapshot} from 'mobx-state-tree'
+import { v4 as uuid} from 'uuid'
 const EmployeeModel = types.model("Employee",{
     id: types.identifier,
     name: types.string,
@@ -12,6 +12,17 @@ const EmployerModel = types.model("Employer",{
     name: types.string,
     location: types.string,
     employees: types.array(EmployeeModel)
+})
+.actions(self =>{
+    // specified list of function, only way you're suposed to edit the tree
+    function newEmployee(name: string, hours_worked: number){
+        const id = uuid();
+        // run apply => allow to use an immutable copy or to create
+        //  a new immutable copy of our tree
+        // specified the new snapshot
+        applySnapshot(self , {...self, employees: [{id,name,hours_worked}, ...self.employees] })
+    }
+    return { newEmployee }
 })
 const RootModel = types.model("Root", {
     // childnode
